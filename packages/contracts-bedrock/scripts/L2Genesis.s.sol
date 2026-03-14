@@ -279,6 +279,9 @@ contract L2Genesis is Script {
         if (_input.useL2CM) {
             setConditionalDeployer(); // 2C
         }
+        setPrivacyRouter(); // 69: ShadowBase PrivacyRouter
+        setShieldedPool(); // 70: ShadowBase ShieldedPool (RAILGUN fork)
+        setPrivacyBridge(); // 71: ShadowBase PrivacyBridge
     }
 
     function setInteropPredeployProxies() internal { }
@@ -593,6 +596,21 @@ contract L2Genesis is Script {
     /// @notice This predeploy is following the safety invariant #1.
     function setConditionalDeployer() internal {
         _setImplementationCode(Predeploys.CONDITIONAL_DEPLOYER);
+    }
+
+    /// @notice ShadowBase: PrivacyRouter predeploy (non-proxied, no initialization).
+    function setPrivacyRouter() internal {
+        _setImplementationCode(Predeploys.PRIVACY_ROUTER);
+    }
+
+    /// @notice ShadowBase: ShieldedPool predeploy (non-proxied, RAILGUN fork).
+    function setShieldedPool() internal {
+        _setImplementationCode(Predeploys.SHIELDED_POOL);
+    }
+
+    /// @notice ShadowBase: PrivacyBridge predeploy (non-proxied).
+    function setPrivacyBridge() internal {
+        _setImplementationCode(Predeploys.PRIVACY_BRIDGE);
     }
 
     /// @notice Sets all the preinstalls.

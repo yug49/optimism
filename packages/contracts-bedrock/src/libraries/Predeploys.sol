@@ -126,6 +126,15 @@ library Predeploys {
     /// @notice Address of the ConditionalDeployer predeploy.
     address internal constant CONDITIONAL_DEPLOYER = 0x420000000000000000000000000000000000002C;
 
+    /// @notice Address of the PrivacyRouter predeploy (ShadowBase custom).
+    address internal constant PRIVACY_ROUTER = 0x4200000000000000000000000000000000000069;
+
+    /// @notice Address of the ShieldedPool predeploy (ShadowBase custom — RAILGUN fork).
+    address internal constant SHIELDED_POOL = 0x4200000000000000000000000000000000000070;
+
+    /// @notice Address of the PrivacyBridge predeploy (ShadowBase custom).
+    address internal constant PRIVACY_BRIDGE = 0x4200000000000000000000000000000000000071;
+
     /// @notice Returns the name of the predeploy at the given address.
     function getName(address _addr) internal pure returns (string memory out_) {
         require(isPredeployNamespace(_addr), "Predeploys: address must be a predeploy");
@@ -162,12 +171,16 @@ library Predeploys {
         if (_addr == NATIVE_ASSET_LIQUIDITY) return "NativeAssetLiquidity";
         if (_addr == FEE_SPLITTER) return "FeeSplitter";
         if (_addr == CONDITIONAL_DEPLOYER) return "ConditionalDeployer";
+        if (_addr == PRIVACY_ROUTER) return "PrivacyRouter";
+        if (_addr == SHIELDED_POOL) return "ShieldedPool";
+        if (_addr == PRIVACY_BRIDGE) return "PrivacyBridge";
         revert("Predeploys: unnamed predeploy");
     }
 
     /// @notice Returns true if the predeploy is not proxied.
     function notProxied(address _addr) internal pure returns (bool) {
-        return _addr == GOVERNANCE_TOKEN || _addr == WETH;
+        return _addr == GOVERNANCE_TOKEN || _addr == WETH || _addr == PRIVACY_ROUTER || _addr == SHIELDED_POOL
+            || _addr == PRIVACY_BRIDGE;
     }
 
     /// @notice Returns true if the address is a defined predeploy that is embedded into new OP-Stack chains.
@@ -192,7 +205,8 @@ library Predeploys {
             || (_fork >= uint256(Fork.INTEROP) && _enableCrossL2Inbox && _addr == CROSS_L2_INBOX)
             || (_fork >= uint256(Fork.INTEROP) && _addr == L2_TO_L2_CROSS_DOMAIN_MESSENGER)
             || (_isCustomGasToken && _addr == LIQUIDITY_CONTROLLER)
-            || (_isCustomGasToken && _addr == NATIVE_ASSET_LIQUIDITY) || (_useL2CM && _addr == CONDITIONAL_DEPLOYER);
+            || (_isCustomGasToken && _addr == NATIVE_ASSET_LIQUIDITY) || (_useL2CM && _addr == CONDITIONAL_DEPLOYER)
+            || _addr == PRIVACY_ROUTER || _addr == SHIELDED_POOL || _addr == PRIVACY_BRIDGE;
     }
 
     /// @notice Returns true if the address is in the predeploy namespace.
